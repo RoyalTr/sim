@@ -140,10 +140,11 @@ def simulate_population(N, s, p0, generations, attempts):
             homozygous = p_t * p_t
             heterozygous = 2.0 * p_t * (1.0 - p_t)
             inheritance_prob = homozygous + 0.5 * heterozygous  # Prob. of inheriting allele A before natural selection
-            fit = ((1.0 + s) * inheritance_prob) / (((1.0 + s) * inheritance_prob) + (1.0 - inheritance_prob))
+            # fit = ((1.0 + s) * inheritance_prob) / (((1.0 + s) * inheritance_prob) + (1.0 - inheritance_prob))
+            fit = ((1.0 + s) * inheritance_prob) / (1.0 + inheritance_prob * s)
             # Sample 2N allele copies from a binomial distribution having a median of fit, which adjusts for allele relative fitness
-            X_t1 = np.random.binomial(2 * N, float(fit))
-            p_t = X_t1 / (2 * N)
+            C = np.random.binomial(2 * N, float(fit))
+            p_t = C / (2 * N)
     loss_probability = losses / attempts
     fixation_probability = fixation / attempts
     fixation_std = np.sqrt(fixation_probability * (1.0 - fixation_probability) / attempts)
